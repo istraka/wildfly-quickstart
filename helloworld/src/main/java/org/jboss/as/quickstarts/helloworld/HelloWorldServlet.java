@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 /**
  *
@@ -44,9 +45,25 @@ public class HelloWorldServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
+        req.setAttribute("a", "b");
         PrintWriter writer = resp.getWriter();
+
         writer.println(PAGE_HEADER);
         writer.println("<h1>Hello World!</h1>");
+        writer.println("<br>ATTRIBUTES:<br>");
+        Enumeration<String> attributeNames = req.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String s = attributeNames.nextElement();
+            writer.println(s + ":" + req.getAttribute(s) + "<br>");
+        }
+        writer.println("<br>===========<br>");
+        writer.println("<br>PARAMS:<br>");
+        Enumeration<String> paramsNames = req.getParameterNames();
+        while (paramsNames.hasMoreElements()) {
+            String s = paramsNames.nextElement();
+            writer.println(s + ":" + req.getParameter(s) + "<br>");
+        }
+        writer.println("<br>===========<br>");
         writer.println(PAGE_FOOTER);
         writer.close();
     }
